@@ -7,20 +7,40 @@ This file outlines the steps to complete the prerequisites for the WBA Enrollmen
 1. **Create a new Keypair**
    - **Setting up**
      - Open Terminal.
-     - Create a new TypeScript project.
-     - Initialize the project and add necessary dependencies.
-     - Create configuration files and scripts for key generation, airdrop, transfer, and enrollment.
+     - Initialize a new Rust library using Cargo:
+       ```sh
+       cargo init --lib
+       ```
+     - Add `solana-sdk` to `Cargo.toml`:
+       ```toml
+       [dependencies]
+       solana-sdk = "1.15.2"
+       ```
+     - Create functions in `src/lib.rs` for the scripts:
+       ```rust
+       #[cfg(test)]
+       mod tests {
+           use solana_sdk;
+           #[test]
+           fn keygen() {}
+           #[test]
+           fn airdrop() {}
+           #[test]
+           fn transfer_sol() {}
+       }
+       ```
    - **Generating a Keypair**
      - Generate a new Solana keypair.
      - Save the keypair in a JSON file.
 
 2. **Import/Export to Phantom**
    - **Conversion Functions**
-     - Convert between wallet formats using base58 encoding and byte arrays.
-     - Create a simple CLI tool for format conversion.
+     - Add `bs58` to `Cargo.toml`.
+     - Create convenience functions to convert between wallet formats.
 
 3. **Claim Token Airdrop**
    - **Import and Setup**
+     - Add `solana_client` to `Cargo.toml`.
      - Import Keypair, Connection, and LAMPORTS_PER_SOL.
      - Recreate the Keypair object using its private key.
      - Establish a connection to the Solana devnet.
@@ -28,6 +48,7 @@ This file outlines the steps to complete the prerequisites for the WBA Enrollmen
 
 4. **Transfer Tokens to WBA Address**
    - **Setup Transfer**
+     - Add `solana-program` to `Cargo.toml`.
      - Import necessary modules and the dev wallet.
      - Define the WBA public key.
      - Create a devnet connection.
@@ -37,20 +58,21 @@ This file outlines the steps to complete the prerequisites for the WBA Enrollmen
 
 5. **Empty devnet wallet into WBA wallet**
    - **Calculate Fees and Transfer Remaining Balance**
+     - Import `Message` from `solana_sdk`.
      - Get the balance of the dev wallet.
      - Calculate the transaction fee.
      - Transfer all remaining lamports minus the fee to the WBA wallet.
      - Sign, broadcast, and confirm the transaction.
 
-6. **Submit your completion of the WBA pre-requisites program**
+6. **Submit your completion of the WBA prerequisites program**
    - **Understanding PDA and IDL**
      - Learn about Program Derived Addresses (PDA) and Interface Definition Language (IDL).
-   - **Consuming an IDL in TypeScript**
-     - Create a type and object for the WBA prerequisite program.
-     - Install necessary dependencies including Anchor.
-     - Create a keypair and connection for the enrollment process.
-     - Convert the GitHub account name to a utf8 buffer.
-     - Create an Anchor provider using the connection and wallet.
-     - Submit the GitHub account name to complete the prerequisites.
+   - **Consuming an IDL in Rust**
+     - Add `borsh` and `solana-idlgen` to `Cargo.toml`.
+     - Create a `programs` folder in the `src` directory.
+     - Create `mod.rs` and `wba_prereq.rs` files.
+     - Declare the `wba_prereq` module in `mod.rs`.
+     - Use the `idlgen` macro to consume the IDL in `wba_prereq.rs`.
+     - Populate the optional metadata fields of the IDL.
+     - Import the generated structs and methods in `lib.rs`.
 
-These steps guide you through setting up a development environment, managing Solana wallets, performing transactions, and submitting your completion for the WBA Enrollment dApp prerequisites.
